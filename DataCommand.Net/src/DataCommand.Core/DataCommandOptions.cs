@@ -1,24 +1,35 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
+using System.Data;
 
 namespace DataCommand.Core
 {
     /// <summary>
-    /// The options to be used by a <see cref="DataCommand{T}"/>, like connection strings.
+    /// This class provides a base implementation for the options used by a <see cref="DataCommand{T}"/>.
+    /// Specific providers should extend this class to add repository specific imlementations.
     /// </summary>
-    public class DataCommandOptions
+    public abstract class DataCommandOptions
     {
         /// <summary>
-        /// Gets or sets the connection string to be used by the data service.
+        /// Gets or sets the connection string to use when creating new connections.
         /// </summary>
         public string ConnectionString { get; set; }
 
         /// <summary>
-        /// Gets or sets the maximum number of retries that will be performed in case of connection Errors.
+        /// Gets or sets the maximum number of retries
         /// </summary>
         public int MaxRetries { get; set; }
+
+        /// <summary>
+        /// Creates a new connection to the database (not opened).
+        /// </summary>
+        /// <returns></returns>
+        public abstract IDbConnection CreateConnection();
+
+        /// <summary>
+        /// Indicates whether or not a retry attempt should be made when <paramref name="exception"/> occurs.
+        /// </summary>
+        /// <param name="exception">The exception to test.</param>
+        /// <returns></returns>
+        public abstract bool ShouldRetryOn(Exception exception);
     }
 }

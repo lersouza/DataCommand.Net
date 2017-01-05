@@ -126,7 +126,7 @@ namespace DataCommand.Core
                     {
                         error = true;
 
-                        Logger.LogError(CommandEventId.ConnectionError, ex, "Error while trying to open the connection. Trying to handle this exception...");
+                        Logger.LogError(CommandEventId.ConnectionError, ex, "Error while trying to open the connection.");
 
                         throw;
 
@@ -191,7 +191,7 @@ namespace DataCommand.Core
         /// <returns><c>true</c>, if the exception could be handled and the command should proceed with normal execution. <c>false</c>, otherwise.</returns>
         protected bool HandleExecutionException(Exception exception)
         {
-            throw new NotImplementedException();
+            return _options.ShouldRetryOn(exception);
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace DataCommand.Core
         /// <returns><c>true</c>, if the exception could be handled and the command should proceed with normal execution. <c>false</c>, otherwise.</returns>
         protected bool HandleOpenConnectionException(Exception ex)
         {
-            throw new NotImplementedException();
+            return _options.ShouldRetryOn(ex);
         }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace DataCommand.Core
         /// <returns></returns>
         protected virtual IDbConnection CreateConnection()
         {
-            return null;
+            return _options.CreateConnection();
         }
 
         /// <summary>
