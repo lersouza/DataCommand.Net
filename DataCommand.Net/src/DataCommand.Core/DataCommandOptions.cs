@@ -20,6 +20,16 @@ namespace DataCommand.Core
         public int MaxRetries { get; set; }
 
         /// <summary>
+        /// Gets or sets the ammount of time (in seconds) for command execution.
+        /// </summary>
+        public int CommandTimeout { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the ammount of time (in seconds) for connection establishment.
+        /// </summary>
+        public int ConnectionTimeout { get; set; }
+
+        /// <summary>
         /// Creates a new connection to the database (not opened).
         /// </summary>
         /// <returns></returns>
