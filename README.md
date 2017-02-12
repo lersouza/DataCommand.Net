@@ -1,4 +1,3 @@
-
 DataCommand.Net
 ===
 [![Nuget](https://img.shields.io/badge/nuget-0.0.1-blue.svg)](https://www.nuget.org/packages/DataCommand.Core/)
@@ -48,3 +47,8 @@ After creating your commands, calling them is straightforward:
 DataCommandOptions options = new PostgresDataOptions() { ConnectionString = "your connection string", MaxRetries = 2 };
 Person person = new GetPersonCommand(1, options, loggerFactory).Run();
 ```
+## Feedback and Contributions
+
+We would love feedback about our library (bugs, feature requests, enhacements, questions and so on). Please, provide them through issues in this repository.
+
+Contributions are also well appreciated. Please, feel free to fork this repository and send us Pull Requests.
