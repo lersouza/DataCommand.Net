@@ -5,5 +5,7 @@ solution: DataCommand.Net.sln
 mono: none
 dotnet: 1.0.0-preview2-003131
 script:
-  - xbuild /p:Configuration=Release DataCommand.Net.sln
+  - dotnet restore
+  - dotnet build ./src/DataCommand.Core/project.json
+  - dotnet build ./test/DataCommand.Core.Tests/project.json
   - dotnet test ./test/DataCommand.Core.Tests/project.json
