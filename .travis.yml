@@ -1,7 +1,9 @@
 language: csharp
+sudo: required
+dist: trusty
 solution: DataCommand.Net.sln
 mono: none
-dotnet: 1.0.0-preview3-004056
+dotnet: 1.0.0-preview2-003131
 script:
   - xbuild /p:Configuration=Release DataCommand.Net.sln
   - dotnet test ./test/DataCommand.Core.Tests/project.json
