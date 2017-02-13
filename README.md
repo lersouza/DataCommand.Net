@@ -1,6 +1,7 @@
 DataCommand.Net
 ===
 [![Nuget](https://img.shields.io/badge/nuget-0.0.1-blue.svg)](https://www.nuget.org/packages/DataCommand.Core/)
+[![Build Status](https://travis-ci.org/lersouza/DataCommand.Net.svg?branch=master)](https://travis-ci.org/lersouza/DataCommand.Net)
 
 A simple command-based data access library for .NET Core projects.
 
