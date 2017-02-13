@@ -1,9 +1,10 @@
 language: csharp
+solution: DataCommand.Net.sln
 mono: none
 dotnet: 1.0.0-preview2-003131
-os:
-  - linux
-  - osx
-branches:
-  only:
-    - master
+install:
+  - nuget restore DataCommand.Net.sln
+  - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release DataCommand.Net.sln
+  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./test/DataCommand.Core.Tests/bin/Release/DataCommand.Core.Tests.dll

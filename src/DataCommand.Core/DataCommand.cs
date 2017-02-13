@@ -77,6 +77,9 @@ namespace DataCommand.Core
             if (null == options) throw new ArgumentNullException("options");
             if (null == loggerFactory) throw new ArgumentNullException("loggerFactory");
 
+            // Test if a connection string was provided
+            if (string.IsNullOrWhiteSpace(options.ConnectionString)) throw new ArgumentException("A connection string must be supplied within options parameter.");
+
             //Setup command's name
             Name = name;
 

@@ -7,10 +7,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7E493B95-46A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F7709930-ED76-4AE0-9CF2-900EA576E4D2}"
 	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
 		global.json = global.json
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataCommand.Core", "src\DataCommand.Core\DataCommand.Core.xproj", "{0CF29166-3357-4141-AD08-E1BA8E8FED61}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataCommand.Core.Tests", "test\DataCommand.Core.Tests\DataCommand.Core.Tests.xproj", "{539C0207-CD2B-4DFA-8C9A-C7DC925E0A65}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{86F6AA5A-8982-4604-8CD5-6942B36427AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,11 +29,16 @@ Global
 		{0CF29166-3357-4141-AD08-E1BA8E8FED61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CF29166-3357-4141-AD08-E1BA8E8FED61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CF29166-3357-4141-AD08-E1BA8E8FED61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{539C0207-CD2B-4DFA-8C9A-C7DC925E0A65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{539C0207-CD2B-4DFA-8C9A-C7DC925E0A65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{539C0207-CD2B-4DFA-8C9A-C7DC925E0A65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{539C0207-CD2B-4DFA-8C9A-C7DC925E0A65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0CF29166-3357-4141-AD08-E1BA8E8FED61} = {7E493B95-46AB-4B19-AF78-8BE1F808F413}
+		{539C0207-CD2B-4DFA-8C9A-C7DC925E0A65} = {86F6AA5A-8982-4604-8CD5-6942B36427AA}
 	EndGlobalSection
 EndGlobal
