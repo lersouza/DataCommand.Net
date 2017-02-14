@@ -14,8 +14,8 @@ namespace DataCommand.Core
     ///         {
     ///             private int _entityId;        
     /// 
-    ///             public MySpecificCommand(int entityId, DataCommandOptions options)
-    ///                 : base("MySpecificCommand", options)
+    ///             public MySpecificCommand(int entityId, DataCommandOptions options, ILoggerFactory factory)
+    ///                 : base("MySpecificCommand", options, factory)
     ///             {
     ///                 _entityId = entityId;
     ///             }
@@ -213,7 +213,13 @@ namespace DataCommand.Core
         /// <returns></returns>
         protected virtual IDbConnection CreateConnection()
         {
-            return _options.CreateConnection();
+            var connection = _options.CreateConnection();
+
+            // Check if it is a valid connection
+            if (connection == null)
+                throw new InvalidOperationException("An invalid connection (null) was supplied by the received options.");
+
+            return connection;
         }
 
         /// <summary>

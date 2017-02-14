@@ -7,7 +7,7 @@
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0-rc1-build3507",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "DataCommand.Core": "0.0.1-*",
+    "DataCommand.Core": "0.0.*",
     "Moq": "4.6.36-*"
   },
 

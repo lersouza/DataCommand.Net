@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace DataCommand.Core.Tests.Infra
 {
-    public class TestLoggerFactory : ILoggerFactory
+    public class FakeLoggerFactory : ILoggerFactory
     {
 
-        public TestLoggerFactory()
+        public FakeLoggerFactory()
         {
         }
 

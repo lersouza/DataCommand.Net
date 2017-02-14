@@ -2,7 +2,7 @@
   "title": "DataCommand.Net Core library",
   "description": "A simple, fast and flexible data access library based on the Command pattern.",
   "authors": [ "lersouza" ],
-  "version": "0.0.1-*",
+  "version": "0.0.2",
   "packOptions": {
     "repository": { "url": "https://github.com/lersouza/DataCommand.Net" },
     "tags": [ "data access", "command pattern", "postgres", "dal" ]

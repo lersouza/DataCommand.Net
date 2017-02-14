@@ -8,14 +8,19 @@ namespace DataCommand.Core.Tests.Infra
 {
     public class FakeDataOptions : DataCommandOptions
     {
+        public List<Type> ShouldRetryList { get; } = new List<Type>();
+
+        public FakeDbConnection CreatedConnection { get; set; }
+
         public override IDbConnection CreateConnection()
         {
-            return null;
+            CreatedConnection = new FakeDbConnection(ConnectionString);
+            return CreatedConnection;
         }
 
         public override bool ShouldRetryOn(Exception exception)
         {
-            return false;
+            return ShouldRetryList.FirstOrDefault(t => t.FullName.Equals(exception.GetType().FullName)) != null;
         }
     }
 }

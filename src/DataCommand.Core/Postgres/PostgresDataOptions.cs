@@ -36,8 +36,7 @@ namespace DataCommand.Core.Postgres
         /// <returns><c>true</c>, if a retry should be made. <c>false</c>, otherwise.</returns>
         public override bool ShouldRetryOn(Exception exception)
         {
-            return (exception is NpgsqlException);
-
+            return (exception is NpgsqlException && !(exception is PostgresException));
         }
     }
 }

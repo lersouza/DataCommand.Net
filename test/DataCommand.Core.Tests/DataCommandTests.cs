@@ -1,6 +1,9 @@
 ﻿using DataCommand.Core.Tests.Infra;
+using Moq;
 using System;
+using System.Data;
 using Xunit;
+using Moq.Protected;
 
 namespace DataCommand.Core.Tests
 {
@@ -14,22 +17,56 @@ namespace DataCommand.Core.Tests
         public void ConstructorTest()
         {
             DataCommandOptions defaultOpts = new FakeDataOptions();
-            TestLoggerFactory loggerFac = new TestLoggerFactory();
+            FakeLoggerFactory loggerFac = new FakeLoggerFactory();
 
-            Assert.Throws<ArgumentNullException>(() => new NonQueryDataCommand(null, null, null));
-            Assert.Throws<ArgumentNullException>(() => new NonQueryDataCommand("", null, null));
-            Assert.Throws<ArgumentNullException>(() => new NonQueryDataCommand(" ", null, null));
-            Assert.Throws<ArgumentNullException>(() => new NonQueryDataCommand("WithAName", defaultOpts, null));
+            Assert.Throws<ArgumentNullException>(() => new FakeDataCommand<int>(null, null, null));
+            Assert.Throws<ArgumentNullException>(() => new FakeDataCommand<int>("", null, null));
+            Assert.Throws<ArgumentNullException>(() => new FakeDataCommand<int>(" ", null, null));
+            Assert.Throws<ArgumentNullException>(() => new FakeDataCommand<int>("WithAName", defaultOpts, null));
 
             // Should check argument exceptions, because some properties in data options are empty
             // ConnectionString is a required option
-            Assert.Throws<ArgumentException>(() => new NonQueryDataCommand("WithAName", defaultOpts, loggerFac));
+            Assert.Throws<ArgumentException>(() => new FakeDataCommand<int>("WithAName", defaultOpts, loggerFac));
 
             // Now, let's setup this as this should be
             defaultOpts.ConnectionString = "some connection string;";
 
             // Creates a data command. No Exception should be thrown at this time.
-            new NonQueryDataCommand("WithAName", defaultOpts, loggerFac);
+            new FakeDataCommand<int>("WithAName", defaultOpts, loggerFac);
+        }
+
+        [Fact]
+        public void InvalidConnectionTest()
+        {
+            var mock = new Mock<DataCommandOptions>();
+            mock.Setup(opt => opt.CreateConnection()).Returns(() => null);
+
+            //Setup some valid properties
+            mock.Object.ConnectionString = "Host=localhost;";
+
+            FakeLoggerFactory loggerFac = new FakeLoggerFactory();
+            var command = new FakeDataCommand<int>("ACommand", mock.Object, loggerFac, (conn) => 0);
+
+            Assert.Throws<InvalidOperationException>(() => command.Run());
+        }
+
+        [Fact]
+        public void ExecuteWithOpenConnectionTest()
+        {
+            var dataOptions = new FakeDataOptions() { ConnectionString = "Host=localhost;" };
+            var loggerFactory = new FakeLoggerFactory();
+
+            var mockCommand = new FakeDataCommand<int>("ACommand", dataOptions, loggerFactory, (conn) => 0);
+
+            //Setup the mock command
+            var ret = mockCommand.Run();
+
+            //Do the asserts
+            Assert.True(dataOptions.CreatedConnection != null);
+            Assert.True(dataOptions.CreatedConnection.OpenCount == 1);
+            Assert.True(dataOptions.CreatedConnection.State == ConnectionState.Closed);
+            Assert.True(mockCommand.LastExecuteState == ConnectionState.Open);
+            Assert.True(ret == 0);
         }
     }
 }
