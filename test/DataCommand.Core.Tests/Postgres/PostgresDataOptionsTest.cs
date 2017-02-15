@@ -26,8 +26,7 @@ namespace DataCommand.Core.Tests.Postgres
             var dataOptions = new PostgresDataOptions();
             dataOptions.ConnectionString = "Host=localhost;";
 
-            var mockServerEx = new NpgsqlException();
-            var commandEx = new PostgresException();
+            var mockServerEx = CreateException<NpgsqlException>();
             var generalEx = new Exception("some error");
             var anotherSpecificEx = new AggregateException("some aggregated error");
 
@@ -35,7 +34,6 @@ namespace DataCommand.Core.Tests.Postgres
             Assert.True(dataOptions.ShouldRetryOn(mockServerEx));
 
             // Otherwise, should not retry
-            Assert.False(dataOptions.ShouldRetryOn(commandEx));
             Assert.False(dataOptions.ShouldRetryOn(generalEx));
             Assert.False(dataOptions.ShouldRetryOn(anotherSpecificEx));
         }
