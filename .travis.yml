@@ -6,6 +6,5 @@ mono: none
 dotnet: 1.0.0-preview2-003131
 script:
   - dotnet restore
-  - dotnet build ./src/DataCommand.Core/project.json
-  - dotnet build ./test/DataCommand.Core.Tests/project.json
-  - dotnet test ./test/DataCommand.Core.Tests/project.json
+  - dotnet build
+  - dotnet test ./test/DataCommand.Core.Tests/DataCommand.Core.Tests.csproj

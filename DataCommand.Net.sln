@@ -1,21 +1,20 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26114.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7E493B95-46AB-4B19-AF78-8BE1F808F413}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F7709930-ED76-4AE0-9CF2-900EA576E4D2}"
 	ProjectSection(SolutionItems) = preProject
 		.travis.yml = .travis.yml
-		global.json = global.json
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataCommand.Core", "src\DataCommand.Core\DataCommand.Core.xproj", "{0CF29166-3357-4141-AD08-E1BA8E8FED61}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommand.Core", "src\DataCommand.Core\DataCommand.Core.csproj", "{0CF29166-3357-4141-AD08-E1BA8E8FED61}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataCommand.Core.Tests", "test\DataCommand.Core.Tests\DataCommand.Core.Tests.xproj", "{539C0207-CD2B-4DFA-8C9A-C7DC925E0A65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommand.Core.Tests", "test\DataCommand.Core.Tests\DataCommand.Core.Tests.csproj", "{539C0207-CD2B-4DFA-8C9A-C7DC925E0A65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{86F6AA5A-8982-4604-8CD5-6942B36427AA}"
 EndProject

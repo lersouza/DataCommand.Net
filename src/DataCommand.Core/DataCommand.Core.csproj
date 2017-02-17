@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>A simple, fast and flexible data access library based on the Command pattern.</Description>
+    <AssemblyTitle>DataCommand.Net Core library</AssemblyTitle>
+    <VersionPrefix>0.0.2</VersionPrefix>
+    <Authors>lersouza</Authors>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>DataCommand.Core</AssemblyName>
+    <PackageId>DataCommand.Core</PackageId>
+    <PackageTags>data access;command pattern;postgres;dal</PackageTags>
+    <RepositoryUrl>https://github.com/lersouza/DataCommand.Net</RepositoryUrl>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <Version>1.0.1.0</Version>
+    <PackageLicenseUrl>https://github.com/lersouza/DataCommand.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/lersouza/DataCommand.Net</PackageProjectUrl>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.1.0" />
+    <PackageReference Include="System.Data.Common" Version="4.3.0" />
+    <PackageReference Include="Npgsql" Version="3.2.1" />
+  </ItemGroup>
+
+  <Target Name="PostcompileScript" AfterTargets="Build">
+    <Exec Command="dotnet pack --no-build --configuration $(Configuration)" />
+  </Target>
+
+</Project>

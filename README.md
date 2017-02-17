@@ -35,7 +35,7 @@ public class GetPersonCommand : DataCommand<Person>
     // The connection parameter refers to an open connection
     // The options parameter contains some options that may be used, as command timeouts.
     
-    // Perform so operations to retrieve the person from database by _personId
+    // Perform some operations to retrieve the person from database by _personId
     
     return person;
   }

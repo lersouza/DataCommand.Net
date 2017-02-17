@@ -5,7 +5,7 @@ namespace DataCommand.Core
 {
     /// <summary>
     /// This class provides a base implementation for the options used by a <see cref="DataCommand{T}"/>.
-    /// Specific providers should extend this class to add repository specific imlementations.
+    /// Specific providers should extend this class to add repository specific implementations, such as connection factory and specific properties.
     /// </summary>
     public abstract class DataCommandOptions
     {
