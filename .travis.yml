@@ -3,7 +3,7 @@ sudo: required
 dist: trusty
 solution: DataCommand.Net.sln
 mono: none
-dotnet: 1.0.0-preview2-003131
+dotnet: 1.0.1
 script:
   - dotnet restore
   - dotnet build
