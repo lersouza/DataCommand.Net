@@ -5,15 +5,8 @@ solution: DataCommand.Net.sln
 mono: none
 dotnet: 1.0.1
 script:
-  - dotnet restore
-  - dotnet build
-  - dotnet test ./test/DataCommand.Core.Tests/DataCommand.Core.Tests.csproj
-
-deploy:
-    provider: script
-    skip_cleanup: true
-    script:
-        - dotnet pack -c Release -o ./release
-        - nuget push ./src/DataCommand.Core/release/*.nupkg $NUGET_API_KEY -Source https://www.nuget.org/api/v2/package
-    on:
-        branch: master
+    - dotnet restore
+    - dotnet build
+    - dotnet test ./test/DataCommand.Core.Tests/DataCommand.Core.Tests.csproj
+after_success:
+    - ./deploy.sh
