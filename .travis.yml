@@ -9,4 +9,5 @@ script:
     - dotnet build
     - dotnet test ./test/DataCommand.Core.Tests/DataCommand.Core.Tests.csproj
 after_success:
+    - chmod +x ./deploy.sh
     - ./deploy.sh
