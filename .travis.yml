@@ -9,7 +9,7 @@ script:
   - dotnet build
   - dotnet test ./test/DataCommand.Core.Tests/DataCommand.Core.Tests.csproj
 
-  deploy:
+deploy:
     provider: script
     skip_cleanup: true
     script:
