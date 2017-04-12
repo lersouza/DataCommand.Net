@@ -26,7 +26,8 @@ namespace DataCommand.Core.Tests.Postgres
             var dataOptions = new PostgresDataOptions();
             dataOptions.ConnectionString = "Host=localhost;";
 
-            var mockServerEx = CreateException<NpgsqlException>();
+            var mockServerEx = new NpgsqlException();
+            var postgresEx = new PostgresException();
             var generalEx = new Exception("some error");
             var anotherSpecificEx = new AggregateException("some aggregated error");
 
@@ -34,25 +35,9 @@ namespace DataCommand.Core.Tests.Postgres
             Assert.True(dataOptions.ShouldRetryOn(mockServerEx));
 
             // Otherwise, should not retry
+            Assert.False(dataOptions.ShouldRetryOn(postgresEx));
             Assert.False(dataOptions.ShouldRetryOn(generalEx));
             Assert.False(dataOptions.ShouldRetryOn(anotherSpecificEx));
-        }
-
-        public static T CreateException<T>()
-        {
-            Type type = typeof(T);
-            TypeInfo info = type.GetTypeInfo();
-            var constructors = info.DeclaredConstructors;
-
-            foreach (var ctor in constructors)
-            {
-                if(ctor.GetParameters().Count() == 0)
-                    return (T)ctor.Invoke(new object[] { });
-                else if(ctor.GetParameters().Count() == 1 && ctor.GetParameters().First().ParameterType.IsAssignableFrom(typeof(string)))
-                    return (T)ctor.Invoke(new object[] { "any message" });
-            }
-
-            throw new InvalidOperationException($"Could not fnd any constructor for the exception '{type.FullName}'");
         }
     }
 }
