@@ -13,7 +13,7 @@ deploy:
     provider: script
     skip_cleanup: true
     script:
-        - dotnet pack
-        - nuget push ./src/DataCommand.Core/**.nupkg $NUGET_API_KEY -verbosity detailed
+        - dotnet pack -c Release -o ./release
+        - nuget push ./src/DataCommand.Core/release/*.nupkg $NUGET_API_KEY -Source https://www.nuget.org/api/v2/package
     on:
         branch: master
