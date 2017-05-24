@@ -12,9 +12,11 @@ namespace DataCommand.Core.Tests.Infra
 
         public FakeDbConnection CreatedConnection { get; set; }
 
+        public Action OnOpeningConnection { get; set; }
+
         public override IDbConnection CreateConnection()
         {
-            CreatedConnection = new FakeDbConnection(ConnectionString);
+            CreatedConnection = new FakeDbConnection(ConnectionString, onOpeningConnection: OnOpeningConnection);
             return CreatedConnection;
         }
 

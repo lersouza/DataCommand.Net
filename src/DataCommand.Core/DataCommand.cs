@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Polly;
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -110,78 +111,61 @@ namespace DataCommand.Core
             //First step, let's handle the connection.
             IDbConnection connection = CreateConnection();
 
-            //Error flag
-            bool error = false;
+
+            // Define the open connection and execution policies
+            var openConnectionPolicy =
+                Policy
+                    .Handle<Exception>((ex) => HandleOpenConnectionException(ex))
+                    .Retry(_options.MaxRetries, (ex, retryCount, context) =>
+                        {
+                            Logger.LogWarning(
+                                CommandEventId.ConnectionError, ex, $"Error while trying to open the connection. Retry count is {retryCount}.");
+                        });
+
+            var executeConnectionPolicy =
+                Policy
+                    .Handle<Exception>((ex) => HandleExecutionException(ex))
+                    .Retry(_options.MaxRetries, (ex, retryCount, context) =>
+                    {
+                        Logger.LogWarning(
+                            CommandEventId.ConnectionError, ex, $"Error while trying to execute this command. Retry count is {retryCount}.");
+                    });
 
             //Let's use the connection, so it can be disposed later
             using (connection)
             {
-                try
+                var result = openConnectionPolicy.ExecuteAndCapture(() =>
                 {
                     //Let's try open a connection to database.
                     connection.Open();
-                }
-                catch(Exception ex)
+                });
+
+                if(result.FinalException != null)
                 {
-                    Logger.LogWarning(CommandEventId.ConnectionError, ex, "Error while trying to open the connection. Trying to handle this exception...");
+                    totalWatch.Stop();
 
-                    if (!HandleOpenConnectionException(ex))
-                    {
-                        error = true;
+                    //Update statistics
+                    Statistics.LastElapsedTime = totalWatch.Elapsed;
 
-                        Logger.LogError(CommandEventId.ConnectionError, ex, "Error while trying to open the connection.");
-
-                        throw;
-
-                        //TODO Implement retries
-                    }
-                }
-                finally
-                {
-                    if (error)
-                    {
-                        totalWatch.Stop();
-
-                        //Update statistics
-                        Statistics.LastElapsedTime = totalWatch.Elapsed;
-                    }
+                    throw result.FinalException;
                 }
 
                 Stopwatch executionWatch = Stopwatch.StartNew();
 
                 //Now, let's try to execute the command
-                try
+                var execResult = executeConnectionPolicy.ExecuteAndCapture<T>(() => Execute(connection, _options));
+
+                executionWatch.Stop();
+                totalWatch.Stop();
+
+                Statistics.LastElapsedTime = totalWatch.Elapsed;
+                Statistics.LastExecElapsedTime = executionWatch.Elapsed;
+
+                if (execResult.FinalException != null)
                 {
-
-                    resultObject = Execute(connection, _options);
+                    throw execResult.FinalException;
                 }
-                catch(Exception exception)
-                {
-                    Logger.LogWarning(CommandEventId.DatabaseError, exception, "There was an error while executing the database command. Trying to handle the error...");
-
-                    if (!HandleExecutionException(exception))
-                    {
-                        Logger.LogError(CommandEventId.ConnectionError, exception, "Error while trying to execute the command.");
-                        throw;
-                    }
-
-                }
-                finally
-                {
-                    executionWatch.Stop();
-
-                    try
-                    {
-                        connection.Close();
-                    }
-                    finally
-                    {
-                        totalWatch.Stop();
-
-                        Statistics.LastElapsedTime = totalWatch.Elapsed;
-                        Statistics.LastExecElapsedTime = executionWatch.Elapsed;
-                    }
-                }
+                resultObject = execResult.Result;
             }
 
             return resultObject;

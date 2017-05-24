@@ -4,6 +4,8 @@ using System;
 using System.Data;
 using Xunit;
 using Moq.Protected;
+using System.Threading.Tasks;
+using Npgsql;
 
 namespace DataCommand.Core.Tests
 {
@@ -67,6 +69,74 @@ namespace DataCommand.Core.Tests
             Assert.True(dataOptions.CreatedConnection.State == ConnectionState.Closed);
             Assert.True(mockCommand.LastExecuteState == ConnectionState.Open);
             Assert.True(ret == 0);
+        }
+
+        [Fact]
+        public void RetryTest1()
+        {
+            int tryOpenCount = 0;
+
+            FakeDataOptions defaultOpts = new FakeDataOptions() {
+                ConnectionString = "Host=localhost;",
+                MaxRetries = 2,
+                OnOpeningConnection = () => {
+                    tryOpenCount++;
+                    Task.Delay(1000);
+
+                    throw new Npgsql.NpgsqlException();
+            } };
+
+            defaultOpts.ShouldRetryList.Add(typeof(Npgsql.NpgsqlException));
+
+            FakeLoggerFactory loggerFac = new FakeLoggerFactory();
+
+            DataCommand<int> command = new FakeDataCommand<int>("CommandForRetry", defaultOpts, loggerFac);
+            Exception exception = null;
+
+            try
+            {
+                command.Run();
+            }
+            catch(Exception ex)
+            {
+                exception = ex;
+            }
+
+            Assert.Equal(tryOpenCount, 3); //The first attempt + 2 retries
+            Assert.True(exception != null);
+            Assert.IsType<Npgsql.NpgsqlException>(exception);
+        }
+
+        [Fact]
+        public void RetryTest2()
+        {
+            FakeLoggerFactory loggerFac = new FakeLoggerFactory();
+            FakeDataOptions defaultOpts = new FakeDataOptions()
+            {
+                ConnectionString = "Host=localhost;",
+                MaxRetries = 2,
+            };
+
+            defaultOpts.ShouldRetryList.Add(typeof(Npgsql.NpgsqlException));
+
+
+            FakeDataCommand<int> command = new FakeDataCommand<int>("CommandForRetry", defaultOpts, loggerFac, (conn) => {
+                throw new PostgresException(); // Emulating a Query error, for instance.
+            });
+            Exception exception = null;
+
+            try
+            {
+                command.Run();
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+
+            Assert.Equal(command.ExecuteCount, 1); //Only one attempt, since no retry should be made to PostgresException
+            Assert.True(exception != null);
+            Assert.IsType<Npgsql.PostgresException>(exception);
         }
     }
 }

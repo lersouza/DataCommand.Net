@@ -11,13 +11,16 @@ namespace DataCommand.Core.Tests.Infra
     public class FakeDbConnection : DbConnection
     {
         private ConnectionState _state;
+        private Action _onOpeningConnection;
 
         public FakeDbConnection(
             string connectionString,
-            ConnectionState state = ConnectionState.Closed)
+            ConnectionState state = ConnectionState.Closed,
+            Action onOpeningConnection = null)
         {
             ConnectionString = connectionString;
             _state = state;
+            _onOpeningConnection = onOpeningConnection;
         }
 
         public void SetState(ConnectionState state)
@@ -45,6 +48,11 @@ namespace DataCommand.Core.Tests.Infra
 
         public override void Open()
         {
+            if (_onOpeningConnection != null)
+            {
+                _onOpeningConnection();
+            }
+
             OpenCount++;
             _state = ConnectionState.Open;
         }
